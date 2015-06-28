@@ -1,6 +1,3 @@
 # cluster-scratch
-cluster-scratch
-=====================
-*Classic Viewer*
 
-[View it live] (https://bsnider.github.io/cluster-scratch/)
+[View it live] (bsnider.github.io/cluster-scratch/)
