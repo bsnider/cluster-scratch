@@ -1,5 +1,24 @@
 var map, item, clusterGroup;
 
+
+
+
+
+
+
+
+
+
+
+$('#map').click(function(){
+    $(".navbar-collapse").collapse('hide');
+});
+
+
+$('#map').click(function(){
+    $(".navbar-collapse").collapse('hide');
+});
+
 // nav bar about modal button
 $("#about-btn").click(function() {
   $("#aboutModal").modal("show");
@@ -20,7 +39,7 @@ $("#nav-btn").click(function() {
     return false;
 });
 
-$("#sidebar-toggle-btn").click(function() {
+$("#toc-btn-sm").click(function() {
   $("#sidebar").toggle();
   map.invalidateSize();
   return false;
@@ -37,19 +56,21 @@ $("#sidebar-hide-btn").click(function() {
   map.invalidateSize();
 });
 
-$("#list-btn").click(function() {
+$("#sideBarTab").click(function() {
+  console.log("hiiii");
+
   $('#sidebar').toggle();
   map.invalidateSize();
   return false;
 });
 
 $("#featureModal").on("hidden.bs.modal", function(e) {
-  $(document).on("mouseout", ".feature-row", clearHighlight);
+  // $(document).on("mouseout", ".feature-row", clearHighlight);
 });
 
 // zoom to and highlight selected sidebar feature
 $(document).on("click", ".feature-row", function(e) {
-  $(document).off("mouseout", ".feature-row", clearHighlight);
+  // $(document).off("mouseout", ".feature-row", clearHighlight);
   sidebarClick(parseInt($(this).attr("id"), 10));
   //$(this).css('background-color', 'red');
 });
@@ -60,7 +81,7 @@ function sidebarClick(id) {
   layer.fire("click");
   /* Hide sidebar and go to the map on small screens */
   if (document.body.clientWidth <= 767) {
-    $("#sidebar").hide();
+    //$("#sidebar").hide();
     map.invalidateSize();
   }
 }
@@ -68,10 +89,10 @@ function sidebarClick(id) {
 
 
 // highlight feature on sidebar hover
-$(document).on("mouseover", ".feature-row", function(e) {
-  highlight.clearLayers().addLayer(L.circleMarker([$(this).attr("lat"), $(this).attr("lng")], highlightStyle));
-});
-$(document).on("mouseout", ".feature-row", clearHighlight);
+// $(document).on("mouseover", ".feature-row", function(e) {
+//   highlight.clearLayers().addLayer(L.circleMarker([$(this).attr("lat"), $(this).attr("lng")], highlightStyle));
+// });
+// $(document).on("mouseout", ".feature-row", clearHighlight);
 
 
 // mapBox basemap and access token
@@ -82,24 +103,59 @@ var mapBoxDark = L.tileLayer('https://{s}.tiles.mapbox.com/v4/mapbox.dark/{z}/{x
 });*/
 
 // create the highlight layer and its properties
-var highlight = L.geoJson(null);
-var highlightStyle = {
-  stroke: false,
-  fillColor: "#00FFFF",
-  fillOpacity: 0.2,
-  radius: 20,
-  iconAnchor: [-100, -80]
-};
+// var highlight = L.geoJson(null);
+// var highlightStyle = {
+//   stroke: false,
+//   fillColor: "#00FFFF",
+//   fillOpacity: 0.2,
+//   radius: 20,
+//   iconAnchor: [-100, -80]
+// };
 
-function clearHighlight() {
-  highlight.clearLayers();
-}
+// function clearHighlight() {
+//   highlight.clearLayers();
+// }
+
+
+// var customControl = L.Control.extend({
+//     options: { position: 'topleft' },
+//     onAdd: function (map) {
+//         var container = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom');
+//         container.style.backgroundColor = 'white';
+//         container.style.backgroundImage = 'url(http://t1.gstatic.com/images?q=tbn:ANd9GcR6FCUMW5bPn8C4PbKak2BJQQsmC-K9-mbYBeFZm1ZM2w2GRy40Ew)';
+//         container.style.backgroundSize = '30px 30px';
+//         container.style.width = '30px';
+//         container.style.height = '30px';
+//         container.onclick = function () {
+//             console.log('buttonClicked');
+//         };
+//         return container;
+//     }
+// });
+// var map;
+// var readyState = function (e) {
+//   map = L.mapbox.map('map','mapbox.dark', {
+//     zoomControl: false
+//   })
+//     .setView([39.828175, -98.5795], 3);
+// };
+// window.addEventListener('DOMContentLoaded', readyState);
+//       //@ sourceURL=pen.js
+//
+
+
+
 
 // create the map
 map = L.mapbox.map('map','mapbox.dark', {
   zoomControl: false
 })
   .setView([39.828175, -98.5795], 3);
+var customControl = L.Control.customControl({position: 'topleft'})
+.addTo(map);
+
+
+
 
 var zoomHome = L.Control.zoomHome({position: 'topright'})
 .addTo(map);
@@ -108,7 +164,7 @@ var zoomHome = L.Control.zoomHome({position: 'topright'})
 var FL = L.mapbox.featureLayer('assets/data/data.geojson').on('ready', function(e) {
 
   //map.addLayer(mapBoxDark);
-  map.addLayer(highlight);
+  // map.addLayer(highlight);
 
 
   // create and add cluster layer instance to map
@@ -145,10 +201,11 @@ var FL = L.mapbox.featureLayer('assets/data/data.geojson').on('ready', function(
           $("#feature-title").html(title);
           $("#feature-info").html(content);
           $("#featureModal").modal("show");
-          highlight.clearLayers().addLayer(L.circleMarker([feature.geometry.coordinates[1], feature.geometry.coordinates[0]], highlightStyle));
+          concole.log("test");
+          // highlight.clearLayers().addLayer(L.circleMarker([feature.geometry.coordinates[1], feature.geometry.coordinates[0]], highlightStyle));
         }
       });
-      
+
     }
   });
 
@@ -166,7 +223,7 @@ var FL = L.mapbox.featureLayer('assets/data/data.geojson').on('ready', function(
     // highlight clicked feature
     clusterGroup.on('click', function(f) {
       if (f.layer.feature.properties.shortName == layer.feature.properties.shortName) {
-        highlight.clearLayers().addLayer(L.circleMarker([layer.feature.geometry.coordinates[1], layer.feature.geometry.coordinates[0]], highlightStyle));
+        // highlight.clearLayers().addLayer(L.circleMarker([layer.feature.geometry.coordinates[1], layer.feature.geometry.coordinates[0]], highlightStyle));
       }
     });
 
@@ -197,15 +254,15 @@ var FL = L.mapbox.featureLayer('assets/data/data.geojson').on('ready', function(
   }
 
   // reareange the legend when the extent changes
-  map.on('moveend', onmove);
+  //map.on('moveend', onmove);
 
   // clear selected feature on map click or zoom
-  map.on('click', function() {
-    highlight.clearLayers();
-
-  });
-  map.on('zoomstart', function() {
-    highlight.clearLayers();
-  });
+  // map.on('click', function() {
+  //   highlight.clearLayers();
+  //
+  // });
+  // map.on('zoomstart', function() {
+  //   highlight.clearLayers();
+  // });
 
 });
